@@ -132,7 +132,7 @@ public class ApplicationContext extends Application implements DependencyInjecto
   }
 
   private void initializeGcmCheck() {
-    if (TextSecurePreferences.isPushRegistered(this) &&
+    if (TextSecurePreferences.isGcmRegistered(this) &&
         TextSecurePreferences.getGcmRegistrationId(this) == null)
     {
       this.jobManager.add(new GcmRefreshJob(this));

@@ -79,8 +79,9 @@ public class GcmRefreshJob extends ContextJob implements InjectableType {
         }
 
         TextSecurePreferences.setGcmRegistrationId(context, gcmId);
-        TextSecurePreferences.setWebsocketRegistered(context, true);
+        TextSecurePreferences.setGcmRegistered(context, true);
       }
+      TextSecurePreferences.setWebsocketRegistered(context, true);
     }
   }
 

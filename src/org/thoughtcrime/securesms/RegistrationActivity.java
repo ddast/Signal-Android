@@ -214,32 +214,47 @@ public class RegistrationActivity extends BaseActionBarActivity {
       int gcmStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(self);
 
       if (gcmStatus != ConnectionResult.SUCCESS) {
-        if (GooglePlayServicesUtil.isUserRecoverableError(gcmStatus)) {
+        if (gcmStatus == ConnectionResult.SERVICE_MISSING) {
+          AlertDialog.Builder builder = new AlertDialog.Builder(self);
+          builder.setTitle(R.string.RegistrationActivity_play_store_missing);
+          builder.setMessage(R.string.RegistrationActivity_the_play_store_app_is_not_installed_on_this_device);
+          builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              showDoubleCheckDialog(self, e164number);
+            }
+          });
+          builder.setNegativeButton(android.R.string.cancel, null);
+          builder.show();
+        } else if (GooglePlayServicesUtil.isUserRecoverableError(gcmStatus)) {
           GooglePlayServicesUtil.getErrorDialog(gcmStatus, self, 9000).show();
         } else {
           Dialogs.showAlertDialog(self, getString(R.string.RegistrationActivity_unsupported),
                                   getString(R.string.RegistrationActivity_sorry_this_device_is_not_supported_for_data_messaging));
         }
-        return;
+      } else {
+        showDoubleCheckDialog(self, e164number);
       }
-
-      AlertDialog.Builder dialog = new AlertDialog.Builder(self);
-      dialog.setTitle(PhoneNumberFormatter.getInternationalFormatFromE164(e164number));
-      dialog.setMessage(R.string.RegistrationActivity_we_will_now_verify_that_the_following_number_is_associated_with_your_device_s);
-      dialog.setPositiveButton(getString(R.string.RegistrationActivity_continue),
-                               new DialogInterface.OnClickListener() {
-                                 @Override
-                                 public void onClick(DialogInterface dialog, int which) {
-                                   Intent intent = new Intent(self, RegistrationProgressActivity.class);
-                                   intent.putExtra("e164number", e164number);
-                                   intent.putExtra("master_secret", masterSecret);
-                                   startActivity(intent);
-                                   finish();
-                                 }
-                               });
-      dialog.setNegativeButton(getString(R.string.RegistrationActivity_edit), null);
-      dialog.show();
     }
+  }
+
+  private void showDoubleCheckDialog(final RegistrationActivity self, final String e164number){
+    AlertDialog.Builder dialog = new AlertDialog.Builder(self);
+    dialog.setTitle(PhoneNumberFormatter.getInternationalFormatFromE164(e164number));
+    dialog.setMessage(R.string.RegistrationActivity_we_will_now_verify_that_the_following_number_is_associated_with_your_device_s);
+    dialog.setPositiveButton(getString(R.string.RegistrationActivity_continue),
+                             new DialogInterface.OnClickListener() {
+                               @Override
+                               public void onClick(DialogInterface dialog, int which) {
+                                 Intent intent = new Intent(self, RegistrationProgressActivity.class);
+                                 intent.putExtra("e164number", e164number);
+                                 intent.putExtra("master_secret", masterSecret);
+                                 startActivity(intent);
+                                 finish();
+                               }
+                             });
+    dialog.setNegativeButton(getString(R.string.RegistrationActivity_edit), null);
+    dialog.show();
   }
 
   private class CountryCodeChangedListener implements TextWatcher {

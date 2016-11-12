@@ -490,6 +490,12 @@
         than 4.0 must have a registered Google Account. Devices running Android 4.0 or newer do not
         require a Google account, but must have the Play Store app installed.
     </string>
+    <string name="RegistrationActivity_play_store_missing">Play Store missing</string>
+    <string name="RegistrationActivity_the_play_store_app_is_not_installed_on_this_device">The Play
+        Store app is not installed on this device but is required to use all functions of Signal.
+        If you choose to continue nevertheless, Signal will consume more battery and voice calls
+        will be deactivated.
+    </string>
     <string name="RegistrationActivity_we_will_now_verify_that_the_following_number_is_associated_with_your_device_s">
         Double-check that this is your number! We\'re about to verify it with an SMS.
     </string>

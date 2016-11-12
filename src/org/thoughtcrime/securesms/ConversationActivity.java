@@ -422,8 +422,8 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     }
 
     if (isSingleConversation()) {
-      if (isSecureVoice) inflater.inflate(R.menu.conversation_callable_secure, menu);
-      else               inflater.inflate(R.menu.conversation_callable_insecure, menu);
+      if (isSecureVoice && TextSecurePreferences.isGcmRegistered(this)) inflater.inflate(R.menu.conversation_callable_secure, menu);
+      else                                                              inflater.inflate(R.menu.conversation_callable_insecure, menu);
     } else if (isGroupConversation()) {
       inflater.inflate(R.menu.conversation_group_options, menu);
 
@@ -730,7 +730,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   private void handleDial(final Recipient recipient) {
     if (recipient == null) return;
 
-    if (isSecureVoice) {
+    if (isSecureVoice && TextSecurePreferences.isGcmRegistered(this)) {
       Intent intent = new Intent(this, RedPhoneService.class);
       intent.setAction(RedPhoneService.ACTION_OUTGOING_CALL);
       intent.putExtra(RedPhoneService.EXTRA_REMOTE_NUMBER, recipient.getNumber());
